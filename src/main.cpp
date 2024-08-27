@@ -1,11 +1,13 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
+#include "graphics/graphics.cpp"
+
 
 // left motor group
-pros::MotorGroup left_motor_group({-1, 2, -3}, pros::MotorGears::blue);
+pros::MotorGroup left_motor_group({-1, -6, -20}, pros::MotorGears::blue);
 // right motor group
-pros::MotorGroup right_motor_group({4, -5, 6}, pros::MotorGears::blue);
+pros::MotorGroup right_motor_group({12, 15, 16}, pros::MotorGears::blue);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
@@ -20,13 +22,13 @@ lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
 pros::Imu imu(10);
 
 //Motors
-pros::Motor idk(7, pros::MotorGearset::green);
-pros::Motor idk2(8, pros::MotorGearset::green);
+pros::Motor intake(7, pros::MotorGearset::green);
+pros::Motor lift(8, pros::MotorGearset::green);
 
 //pneumatics
-pros::adi::DigitalOut idk3('A');
-pros::adi::DigitalOut idk4('B');
-pros::adi::DigitalOut idk5('C');
+pros::adi::DigitalOut tilt1('A');
+pros::adi::DigitalOut tilt2('B');
+pros::adi::DigitalOut grm('C');
 
 // odometry settings
 lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
@@ -96,6 +98,7 @@ void initialize() {
             pros::delay(20);
         }
     });
+
 }
 
 
@@ -113,13 +116,17 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 void opcontrol() {
     // loop forever
     while (true) {
-        // get left y and right y positions
+       
+        // get left y and right x positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightY = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
         // move the robot
-        chassis.tank(leftY, rightY);
+        chassis.arcade(leftY, rightX);
 
+        //Tilter
+        
+        
         // delay to save resources
         pros::delay(25);
     }

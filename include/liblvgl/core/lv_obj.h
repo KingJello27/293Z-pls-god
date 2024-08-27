@@ -17,11 +17,11 @@ extern "C" {
 
 #include <stddef.h>
 #include <stdbool.h>
-#include "../misc/lv_style.h"
-#include "../misc/lv_types.h"
+#include "../misc/lv_style.h" // IWYU pragma: keep
+#include "../misc/lv_types.h" // IWYU pragma: keep
 #include "../misc/lv_area.h"
-#include "../misc/lv_color.h"
-#include "../misc/lv_assert.h"
+#include "../misc/lv_color.h" // IWYU pragma: keep
+#include "../misc/lv_assert.h" // IWYU pragma: keep
 #include "../hal/lv_hal.h"
 
 /*********************
