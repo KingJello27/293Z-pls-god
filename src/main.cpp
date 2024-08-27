@@ -114,6 +114,14 @@ void autonomous() {}
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 void opcontrol() {
+
+    bool tilterState = false;
+    tilt1.set_value(tilterState);
+    tilt2.set_value(tilterState);
+
+    bool grmState = false;
+    grm.set_value(grmState);
+
     // loop forever
     while (true) {
        
@@ -124,8 +132,56 @@ void opcontrol() {
         // move the robot
         chassis.arcade(leftY, rightX);
 
-        //Tilter
-        
+        //Shift Key
+        if (controller.get_digital(DIGITAL_L1)){
+
+            //Lift Control
+            if (controller.get_digital(DIGITAL_R2)){
+                lift.move_voltage(12000);
+            }else if (controller.get_digital(DIGITAL_R1)){
+                intake.move_voltage(-12000);
+            }else{
+                lift.move_voltage(0);
+            }
+
+            //Goal Rush Mech Control
+            if (controller.get_digital_new_press(DIGITAL_L2)){
+            grmState = !grmState;
+            grm.set_value(grmState);
+            }
+
+        }
+
+        //Tilter Control
+        if (controller.get_digital_new_press(DIGITAL_L2)){
+        tilterState = !tilterState;
+        tilt1.set_value(tilterState);
+        tilt2.set_value(tilterState);
+        }
+
+        // //Goal Rush Mech Control
+        // if (controller.get_digital_new_press(DIGITAL_L2)){
+        // grmState = !grmState;
+        // grm.set_value(grmState);
+        // }
+
+        //Intake Control
+        if (controller.get_digital(DIGITAL_R2)){
+            intake.move_voltage(12000);
+        }else if (controller.get_digital(DIGITAL_R1))
+            intake.move_voltage(-12000);
+        else{
+            intake.move_voltage(0);
+        }
+
+        // //Lift Control
+        // if (controller.get_digital(DIGITAL_R2)){
+        //     lift.move_voltage(12000);
+        // }else if (controller.get_digital(DIGITAL_R1))
+        //     intake.move_voltage(-12000);
+        // else{
+        //     lift.move_voltage(0);
+        // }
         
         // delay to save resources
         pros::delay(25);
