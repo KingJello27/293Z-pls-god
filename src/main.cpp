@@ -2,12 +2,14 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "graphics/graphics.cpp"
+#include "pros/colors.hpp" // IWYU pragma: keep
+#include "pros/misc.h"
 
 
 // left motor group
-pros::MotorGroup left_motor_group({-1, -6, -20}, pros::MotorGears::blue);
+pros::MotorGroup left_motor_group({-9, -7, -21}, pros::MotorGears::blue);
 // right motor group
-pros::MotorGroup right_motor_group({12, 15, 16}, pros::MotorGears::blue);
+pros::MotorGroup right_motor_group({8, 6, 4}, pros::MotorGears::blue);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
@@ -18,17 +20,26 @@ lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
                               2 // horizontal drift is 2 (for now)
 );
 
-//imu
-pros::Imu imu(10);
+//IMU
+pros::Imu imu(18);
+
+// //Optical Sensor
+// pros::Optical opticalSensor(5);
+// pros::c::optical_rgb_s_t rgb_value;
+
+//Rotation Sensor
+pros::Rotation rotationSensor(10);
 
 //Motors
-pros::Motor intake(7, pros::MotorGearset::green);
-pros::Motor lift(8, pros::MotorGearset::green);
+pros::Motor intake(10, pros::MotorGearset::blue);
+pros::Motor ladyBrown(19, pros::MotorGearset::green);
 
 //pneumatics
 pros::adi::DigitalOut tilt1('A');
 pros::adi::DigitalOut tilt2('B');
-pros::adi::DigitalOut grm('C');
+pros::adi::DigitalOut doinker('C');
+// pros::adi::DigitalOut grm('C');
+// pros::adi::DigitalOut colorPicker('D');
 
 // odometry settings
 lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
@@ -87,6 +98,7 @@ lemlib::Chassis chassis(drivetrain,
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    
     // print position to brain screen
     pros::Task screen_task([&]() {
         while (true) {
@@ -107,11 +119,41 @@ void disabled() {}
 
 void competition_initialize() {}
 
+//Lady Brown
+const int start = 0;  
+const int receive = 10; 
+const int score = 160; 
 
-void autonomous() {}
+void setPosition(int targetPosition) {
+    ladyBrown.move_absolute(targetPosition, 100);
+    while (abs(rotationSensor.get_position() - targetPosition) > 5) {
+        pros::delay(20);
+    }
+}
+
+void autonomous() {
+ //Rotation Sensor -> Lady Brown Motor
+    rotationSensor.get_position();
+
+    rotationSensor.reset_position();
+    int currentPosition = 1;
+
+    if (currentPosition == 0) {
+                setPosition(start);
+                currentPosition = 1;
+            } else if (currentPosition == 1) {
+                setPosition(receive);
+                currentPosition = 2;
+            } else if (currentPosition == 2) {
+                setPosition(score);
+                currentPosition = 0;
+            }
+}
 
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+
 
 void opcontrol() {
 
@@ -119,8 +161,15 @@ void opcontrol() {
     tilt1.set_value(tilterState);
     tilt2.set_value(tilterState);
 
-    bool grmState = false;
-    grm.set_value(grmState);
+    bool doinkerState = false;
+    doinker.set_value(doinkerState);
+
+    // bool grmState = false;
+    // grm.set_value(grmState);
+
+    rotationSensor.reset_position();
+    int currentPosition = 1;
+
 
     // loop forever
     while (true) {
@@ -132,24 +181,31 @@ void opcontrol() {
         // move the robot
         chassis.arcade(leftY, rightX);
 
+        //Rotation Sensor -> Lady Brown Motor
+        rotationSensor.get_position();
+        
+
         //Shift Key
         if (controller.get_digital(DIGITAL_L1)){
 
+            // //Intake Supressor
+            // intake.move_voltage(0);
+
+            // //Tilter Supressor
+            // tilt1.set_value(false);
+            // tilt2.set_value(false);
+
             //Lift Control
-            if (controller.get_digital(DIGITAL_R2)){
-                lift.move_voltage(12000);
-            }else if (controller.get_digital(DIGITAL_R1)){
-                intake.move_voltage(-12000);
-            }else{
-                lift.move_voltage(0);
+            if (controller.get_digital_new_press(DIGITAL_R1)){
+                
             }
+            
 
-            //Goal Rush Mech Control
-            if (controller.get_digital_new_press(DIGITAL_L2)){
-            grmState = !grmState;
-            grm.set_value(grmState);
-            }
-
+            // //Goal Rush Mech Control
+            // if (controller.get_digital_new_press(DIGITAL_L2)){
+            // grmState = !grmState;
+            // grm.set_value(grmState);
+            // }
         }
 
         //Tilter Control
@@ -157,6 +213,12 @@ void opcontrol() {
         tilterState = !tilterState;
         tilt1.set_value(tilterState);
         tilt2.set_value(tilterState);
+        }
+
+        //Doinker Control
+        if (controller.get_digital_new_press(DIGITAL_UP)){
+        doinkerState = !doinkerState;
+        doinker.set_value(doinkerState);
         }
 
         // //Goal Rush Mech Control
@@ -167,22 +229,43 @@ void opcontrol() {
 
         //Intake Control
         if (controller.get_digital(DIGITAL_R2)){
-            intake.move_voltage(12000);
+            intake.move_voltage(-10000);
         }else if (controller.get_digital(DIGITAL_R1))
-            intake.move_voltage(-12000);
+            intake.move_voltage(10000);
         else{
             intake.move_voltage(0);
         }
 
-        // //Lift Control
-        // if (controller.get_digital(DIGITAL_R2)){
-        //     lift.move_voltage(12000);
-        // }else if (controller.get_digital(DIGITAL_R1))
-        //     intake.move_voltage(-12000);
-        // else{
-        //     lift.move_voltage(0);
-        // }
-        
+        //Lady Brown
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+            if (currentPosition == 0) {
+                setPosition(start);
+                currentPosition = 1;
+            } else if (currentPosition == 1) {
+                setPosition(receive);
+                currentPosition = 2;
+            } else if (currentPosition == 2) {
+                setPosition(score);
+                currentPosition = 0;
+            }
+        }
+
+//         //Color Sorter
+//         rgb_value = opticalSensor.get_rgb();
+//             //Blue
+//             if (rgb_value.blue){
+//                 colorPicker.set_value(true);
+//                 pros::delay(800);
+//                 colorPicker.set_value(false);
+// ;            }
+
+//             //Red
+//             if (rgb_value.red){
+//                 colorPicker.set_value(true);
+//                 pros::delay(800);
+//                 colorPicker.set_value(false);
+//             }
+
         // delay to save resources
         pros::delay(25);
     }
