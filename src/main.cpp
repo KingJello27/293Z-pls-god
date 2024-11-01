@@ -99,6 +99,7 @@ void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
     
+
     // print position to brain screen
     pros::Task screen_task([&]() {
         while (true) {
@@ -131,14 +132,14 @@ void setPosition(int targetPosition) {
     }
 }
 
-void autonomous() {
- //Rotation Sensor -> Lady Brown Motor
+
+int currentPosition = 1;
+
+void autonLadyBrown (){
+
     rotationSensor.get_position();
 
-    rotationSensor.reset_position();
-    int currentPosition = 1;
-
-    if (currentPosition == 0) {
+        if (currentPosition == 0) {
                 setPosition(start);
                 currentPosition = 1;
             } else if (currentPosition == 1) {
@@ -148,6 +149,17 @@ void autonomous() {
                 setPosition(score);
                 currentPosition = 0;
             }
+}
+
+void autonomous() {
+ rotationSensor.reset_position();
+
+ int currentPosition = 1;
+
+ autonLadyBrown();
+    
+
+    
 }
 
 
