@@ -14,7 +14,7 @@ pros::MotorGroup leftMotors({-13, -14, -20}, pros::MotorGears::blue);
 pros::MotorGroup rightMotors({11, 12, 19}, pros::MotorGears::blue);
 
 //IMU
-pros::Imu imu(18);
+pros::Imu imu(16);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -84,21 +84,39 @@ lemlib::Chassis chassis(drivetrain,
 // pros::Optical opticalSensor(5);
 // pros::c::optical_rgb_s_t rgb_value;
 
-//Rotation Sensor
-pros::Rotation rotationSensor(10);
+// //Rotation Sensor
+// pros::Rotation rotationSensor(3);
+// // horizontal tracking wheel encoder
+// pros::Rotation horizontal_encoder(8);
 
 //Motors
-pros::Motor intake(10, pros::MotorGearset::blue);
-pros::Motor ladyBrown(19, pros::MotorGearset::green);
+pros::Motor intake(18, pros::MotorGearset::blue);
+// pros::Motor ladyBrown1(5, pros::MotorGearset::green);
+// pros::Motor ladyBrown2(-4, pros::MotorGearset::green);
+
+
 
 //pneumatics
-pros::adi::DigitalOut tilt1('A');
-pros::adi::DigitalOut tilt2('B');
-pros::adi::DigitalOut doinker('C');
+pros::adi::DigitalOut tilter('B');
+pros::adi::DigitalOut doinker('A');
 // pros::adi::DigitalOut grm('C');
 // pros::adi::DigitalOut colorPicker('D');
 
-
+//Auton Selector
+std::array<std::string,4> autonNames = {"Red Right AWP","Blue Left AWP","Red Left AWP","Blue Left AWP"};
+int selectionIndex = 0;
+void leftShift(){
+    selectionIndex--;
+    if (selectionIndex < 0)
+    selectionIndex = 3;
+}
+void rightShift(){
+    selectionIndex++;
+    if (selectionIndex > 3)
+    selectionIndex = 0;
+}
+// // horizontal tracking wheel
+// lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::OLD_275, -5.75);
 
 
 
@@ -139,63 +157,63 @@ void disabled() {}
 
 void competition_initialize() {}
 
-// //Lady Brown
-// const int start = 0;  
-// const int receive = 22; 
-// const int score = 145; 
+    // //Lady Brown
+    // const int start = 0;  
+    // const int receive = 22; 
+    // const int score = 145; 
 
-// void setPosition(int targetPosition) {
-//     ladyBrown1.move_absolute(targetPosition, 100);
-//     ladyBrown2.move_absolute(targetPosition, 100);
-//     // while (abs(rotationSensor.get_position() - targetPosition) > 5) {
-//     //     pros::delay(20);
-//     // }
-//     pros::delay(50);
-// }
+    // void setPosition(int targetPosition) {
+    //     ladyBrown1.move_absolute(targetPosition, 100);
+    //     ladyBrown2.move_absolute(targetPosition, 100);
+    //     // while (abs(rotationSensor.get_position() - targetPosition) > 5) {
+    //     //     pros::delay(20);
+    //     // }
+    //     pros::delay(50);
+    // }
 
 
-// int currentPosition = 1;
+    // int currentPosition = 1;
 
-// void autonLadyBrown (){
+    // void autonLadyBrown (){
 
-//     rotationSensor.get_position();
+    //     rotationSensor.get_position();
 
-//         if (currentPosition == 0) {
-//                 setPosition(start);
-//                 currentPosition = 1;
-//             } else if (currentPosition == 1) {
-//                 setPosition(receive);
-//                 currentPosition = 2;
-//             } else if (currentPosition == 2) {
-//                 setPosition(score);
-//                 currentPosition = 0;
-//             }
-// }
+    //         if (currentPosition == 0) {
+    //                 setPosition(start);
+    //                 currentPosition = 1;
+    //             } else if (currentPosition == 1) {
+    //                 setPosition(receive);
+    //                 currentPosition = 2;
+    //             } else if (currentPosition == 2) {
+    //                 setPosition(score);
+    //                 currentPosition = 0;
+    //             }
+    // }
 
-//chassis.moveToPose(0, 24, 0, 5000, {.maxSpeed = 80, .minSpeed = 40});
-// chassis.turnToHeading(90, 2000);
-// chassis.waitUntilDone();
+    //chassis.moveToPose(0, 24, 0, 5000, {.maxSpeed = 80, .minSpeed = 40});
+    // chassis.turnToHeading(90, 2000);
+    // chassis.waitUntilDone();
 
 void autonomous() {
 
-if (selectionIndex == 0){
-    //Red Right AWP
-    chassis.setPose(0, 0, 0);
-    
+    if (selectionIndex == 0){
+        //Red Right AWP
+        chassis.setPose(0, 0, 0);
+        
 
-}else if (selectionIndex == 1){
-    //Blue Left AWP
-    chassis.setPose(0, 0, 0);
+    }else if (selectionIndex == 1){
+        //Blue Left AWP
+        chassis.setPose(0, 0, 0);
 
-}else if (selectionIndex == 2){
-    //Red Left AWP
-    chassis.setPose(0, 0, 0);
-    
-}else if (selectionIndex == 3){
-    //Blue Right AWP
-    chassis.setPose(0, 0, 0);
-    
-}
+    }else if (selectionIndex == 2){
+        //Red Left AWP
+        chassis.setPose(0, 0, 0);
+        
+    }else if (selectionIndex == 3){
+        //Blue Right AWP
+        chassis.setPose(0, 0, 0);
+        
+    }
     
 }
 
