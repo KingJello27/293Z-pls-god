@@ -26,9 +26,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral PID controller
-lemlib::ControllerSettings lateral_controller(8, // proportional gain (kP)
-                                              0.5, // integral gain (kI)
-                                              3, // derivative gain (kD)
+lemlib::ControllerSettings lateral_controller(5, // proportional gain (kP)
+                                              1, // integral gain (kI)
+                                              3.5, // derivative gain (kD)
                                               3, // anti windup
                                               1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
@@ -190,7 +190,7 @@ void competition_initialize() {}
     //             }
     // }
 
-    //chassis.moveToPose(0, 24, 0, 5000, {.maxSpeed = 80, .minSpeed = 40});
+    //chassis.moveToPose(0, 24, 0,4000, {.forwards = true, .maxSpeed = 70, .minSpeed = 40});
     // chassis.turnToHeading(90, 2000);
     // chassis.waitUntilDone();
 
@@ -199,7 +199,27 @@ void autonomous() {
     if (selectionIndex == 0){
         //Red Right AWP
         chassis.setPose(0, 0, 0);
+        // chassis.moveToPose(10, 10, 90,4000, {.forwards = true, .maxSpeed = 80, .minSpeed = 60});
+        chassis.moveToPose(0, -10, 0, 4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
+        chassis.waitUntilDone();
+        chassis.turnToHeading(90, 4000);
+        chassis.waitUntilDone();
+        chassis.moveToPose(-11.5, -10, 90, 4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
+        chassis.waitUntilDone();
+        // chassis.turnToHeading(90, 4000);
+        // chassis.waitUntilDone();
+
         
+
+        // //score on alliance stake
+        // chassis.moveToPose(-65, 0, 0,4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
+        // chassis.waitUntilDone();
+        // // chassis.turnToHeading(90, 4000);
+        // // chassis.waitUntilDone();
+        // // chassis.moveToPose(-10, -15, 90,4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
+        // // chassis.waitUntilDone();
+        // intake.move_velocity(12000);
+
 
     }else if (selectionIndex == 1){
         //Blue Left AWP
