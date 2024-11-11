@@ -7,46 +7,20 @@
 
 
 // left motor group
-pros::MotorGroup left_motor_group({-9, -7, -21}, pros::MotorGears::blue);
+pros::MotorGroup leftMotors({-9, -7, -21}, pros::MotorGears::blue);
 // right motor group
-pros::MotorGroup right_motor_group({8, 6, 4}, pros::MotorGears::blue);
-
-// drivetrain settings
-lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
-                              &right_motor_group, // right motor group
-                              11.5, // 12 inch track width
-                              lemlib::Omniwheel::OLD_325, // using old 3.25" omnis
-                              450, // drivetrain rpm is 360
-                              2 // horizontal drift is 2 (for now)
-);
+pros::MotorGroup rightMotors({8, 6, 4}, pros::MotorGears::blue);
 
 //IMU
 pros::Imu imu(18);
 
-//Optical Sensor
-// pros::Optical opticalSensor(5);
-// pros::c::optical_rgb_s_t rgb_value;
-
-//Rotation Sensor
-pros::Rotation rotationSensor(10);
-
-//Motors
-pros::Motor intake(10, pros::MotorGearset::blue);
-pros::Motor ladyBrown(19, pros::MotorGearset::green);
-
-//pneumatics
-pros::adi::DigitalOut tilt1('A');
-pros::adi::DigitalOut tilt2('B');
-pros::adi::DigitalOut doinker('C');
-// pros::adi::DigitalOut grm('C');
-// pros::adi::DigitalOut colorPicker('D');
-
-// odometry settings
-lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
-                            nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
-                            nullptr, // horizontal tracking wheel 1
-                            nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
-                            &imu // inertial sensor
+// drivetrain settings
+lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
+                              &rightMotors, // right motor group
+                              11.5, // 12 inch track width
+                              lemlib::Omniwheel::OLD_325, // using old 3.25" omnis
+                              450, // drivetrain rpm is 360
+                              2 // horizontal drift is 2 (for now)
 );
 
 // lateral PID controller
@@ -73,6 +47,16 @@ lemlib::ControllerSettings angular_controller(2, // proportional gain (kP)
                                               0 // maximum acceleration (slew)
 );
 
+// sensors for odometry
+lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel
+                            nullptr, // vertical tracking wheel 2, set to nullptr as we don't have a second one
+                            nullptr, // horizontal tracking wheel
+                            nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
+                            &imu // inertial sensor
+);
+
+// @KingJello27 What are these stuff for?
+
 // input curve for throttle input during driver control
 lemlib::ExpoDriveCurve throttle_curve(3, // joystick deadband out of 127
                                      10, // minimum output where drivetrain will move out of 127
@@ -93,6 +77,30 @@ lemlib::Chassis chassis(drivetrain,
                         &throttle_curve, 
                         &steer_curve
 );
+
+// // Optical Sensor
+// pros::Optical opticalSensor(5);
+// pros::c::optical_rgb_s_t rgb_value;
+
+//Rotation Sensor
+pros::Rotation rotationSensor(10);
+
+//Motors
+pros::Motor intake(10, pros::MotorGearset::blue);
+pros::Motor ladyBrown(19, pros::MotorGearset::green);
+
+//pneumatics
+pros::adi::DigitalOut tilt1('A');
+pros::adi::DigitalOut tilt2('B');
+pros::adi::DigitalOut doinker('C');
+// pros::adi::DigitalOut grm('C');
+// pros::adi::DigitalOut colorPicker('D');
+
+
+
+
+
+
 
 
 void initialize() {
