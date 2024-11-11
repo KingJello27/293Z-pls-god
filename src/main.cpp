@@ -103,16 +103,16 @@ pros::adi::DigitalOut doinker('A');
 // pros::adi::DigitalOut colorPicker('D');
 
 //Auton Selector
-std::array<std::string,4> autonNames = {"Red Right AWP","Blue Left AWP","Red Left AWP","Blue Left AWP"};
+std::array<std::string,8> autonNames = {"Red Right AWP","Blue Left AWP","Red Left AWP","Blue Left AWP", "Red Right","Blue Left","Red Left","Blue Left"};
 int selectionIndex = 0;
 void leftShift(){
     selectionIndex--;
     if (selectionIndex < 0)
-    selectionIndex = 3;
+    selectionIndex = 7;
 }
 void rightShift(){
     selectionIndex++;
-    if (selectionIndex > 3)
+    if (selectionIndex > 7)
     selectionIndex = 0;
 }
 // // horizontal tracking wheel
@@ -213,7 +213,24 @@ void autonomous() {
         //Blue Right AWP
         chassis.setPose(0, 0, 0);
         
+    }else if (selectionIndex == 4){
+        //Blue Right AWP
+        chassis.setPose(0, 0, 0);
+        
+    }else if (selectionIndex == 5){
+        //Blue Right AWP
+        chassis.setPose(0, 0, 0);
+        
+    }else if (selectionIndex == 6){
+        //Blue Right AWP
+        chassis.setPose(0, 0, 0);
+        
+    }else if (selectionIndex == 7){
+        //Blue Right AWP
+        chassis.setPose(0, 0, 0);
+        
     }
+    
     
 }
 
