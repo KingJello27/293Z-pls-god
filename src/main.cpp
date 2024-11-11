@@ -14,7 +14,7 @@ pros::MotorGroup right_motor_group({8, 6, 4}, pros::MotorGears::blue);
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
                               &right_motor_group, // right motor group
-                              12, // 12 inch track width
+                              11.5, // 12 inch track width
                               lemlib::Omniwheel::OLD_325, // using old 3.25" omnis
                               450, // drivetrain rpm is 360
                               2 // horizontal drift is 2 (for now)
@@ -23,7 +23,7 @@ lemlib::Drivetrain drivetrain(&left_motor_group, // left motor group
 //IMU
 pros::Imu imu(18);
 
-// //Optical Sensor
+//Optical Sensor
 // pros::Optical opticalSensor(5);
 // pros::c::optical_rgb_s_t rgb_value;
 
