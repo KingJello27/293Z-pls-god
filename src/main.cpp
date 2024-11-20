@@ -13,6 +13,15 @@ pros::MotorGroup leftMotors({-13, -14, -20}, pros::MotorGears::blue);
 // right motor group
 pros::MotorGroup rightMotors({11, 12, 19}, pros::MotorGears::blue);
 
+// vertical tracking wheel encoder
+pros::Rotation vertical_encoder(3);
+// horizontal tracking wheel encoder
+pros::Rotation horizontal_encoder(8);
+// horizontal tracking wheel
+lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::OLD_275, -3);
+// horizontal tracking wheel
+lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::OLD_275, -0.5);
+
 //IMU
 pros::Imu imu(16);
 
@@ -26,33 +35,33 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral PID controller
-lemlib::ControllerSettings lateral_controller(5, // proportional gain (kP)
-                                              1, // integral gain (kI)
-                                              3.5, // derivative gain (kD)
+lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)
+                                              0, // integral gain (kI)
+                                              3, // derivative gain (kD)
                                               3, // anti windup
                                               1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
                                               3, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)s
+                                              20 // maximum acceleration (slew)
 );
 
 // angular PID controller
-lemlib::ControllerSettings angular_controller(1.5, // proportional gain (kP)
-                                              0.5, // integral gain (kI)
+lemlib::ControllerSettings angular_controller(2, // proportional gain (kP)
+                                              0, // integral gain (kI)
                                               10, // derivative gain (kD)
                                               3, // anti windup
-                                              1, // small error range, in degrees
+                                              1, // small error range, in inches
                                               100, // small error range timeout, in milliseconds
-                                              3, // large error range, in degrees
+                                              3, // large error range, in inches
                                               500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 
 // sensors for odometry
-lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel
+lemlib::OdomSensors sensors(&vertical_tracking_wheel, // vertical tracking wheel
                             nullptr, // vertical tracking wheel 2, set to nullptr as we don't have a second one
-                            nullptr, // horizontal tracking wheel
+                            &horizontal_tracking_wheel, // horizontal tracking wheel
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
 );
@@ -80,14 +89,6 @@ lemlib::Chassis chassis(drivetrain,
                         &steer_curve
 );
 
-// // Optical Sensor
-// pros::Optical opticalSensor(5);
-// pros::c::optical_rgb_s_t rgb_value;
-
-// //Rotation Sensor
-// pros::Rotation rotationSensor(3);
-// // horizontal tracking wheel encoder
-// pros::Rotation horizontal_encoder(8);
 
 //Motors
 pros::Motor intake(18, pros::MotorGearset::blue);
@@ -115,8 +116,7 @@ void rightShift(){
     if (selectionIndex > 7)
     selectionIndex = 0;
 }
-// // horizontal tracking wheel
-// lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::OLD_275, -5.75);
+
 
 
 
@@ -199,27 +199,6 @@ void autonomous() {
     if (selectionIndex == 0){
         //Red Right AWP
         chassis.setPose(0, 0, 0);
-        // chassis.moveToPose(10, 10, 90,4000, {.forwards = true, .maxSpeed = 80, .minSpeed = 60});
-        chassis.moveToPose(0, -10, 0, 4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
-        chassis.waitUntilDone();
-        chassis.turnToHeading(90, 4000);
-        chassis.waitUntilDone();
-        chassis.moveToPose(-11.5, -10, 90, 4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
-        chassis.waitUntilDone();
-        // chassis.turnToHeading(90, 4000);
-        // chassis.waitUntilDone();
-
-        
-
-        // //score on alliance stake
-        // chassis.moveToPose(-65, 0, 0,4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
-        // chassis.waitUntilDone();
-        // // chassis.turnToHeading(90, 4000);
-        // // chassis.waitUntilDone();
-        // // chassis.moveToPose(-10, -15, 90,4000, {.forwards = false, .maxSpeed = 80, .minSpeed = 60});
-        // // chassis.waitUntilDone();
-        // intake.move_velocity(12000);
-
 
     }else if (selectionIndex == 1){
         //Blue Left AWP
