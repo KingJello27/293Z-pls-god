@@ -8,6 +8,7 @@
 #include <array> // IWYU pragma: keep
 #include "globals.hpp"
 #include "autonomous.cpp"
+#include "ladybrown.cpp" // IWYU pragma: keep
 
 
 void opcontrol() {
@@ -20,16 +21,20 @@ void opcontrol() {
     bool doinkerState = false;
     doinker.set_value(doinkerState);
 
+    bool shift = false;
 
     // loop forever
     while (true) {
        
-        // get left y and right x positions
+         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-
-        // move the robot
-        chassis.arcade(leftY, rightX);
+        // move the chassis with arcade controls
+        chassis.arcade(leftY, // throttle
+                       rightX, // steer
+                       false, // enable drive curves
+                       0.75 // slightly prioritize steering
+        );
 
 
         //Tilter Control
@@ -45,20 +50,37 @@ void opcontrol() {
         doinker.set_value(doinkerState);
         }
 
-
-        //Intake Control
-        if (controller.get_digital(DIGITAL_R2)){
-            intake.move_voltage(-10000);
-            intake2.move_voltage(-10000);
-        }else if (controller.get_digital(DIGITAL_R1)){
-            intake.move_voltage(10000);
-            intake2.move_voltage(10000);
-        }else{
-            intake.move_voltage(0);
-            intake2.move_voltage(0);
+        //Shift Toggle
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)){
+            shift = !shift;
         }
 
-        //Lady Brown
+        //Intake Control
+        if (shift == false){
+            if (controller.get_digital(DIGITAL_R2)){
+                intake.move_voltage(-10000);
+                intake2.move_voltage(-10000);
+            }else if (controller.get_digital(DIGITAL_R1)){
+                intake.move_voltage(10000);
+                intake2.move_voltage(10000);
+            }else{
+                intake.move_voltage(0);
+                intake2.move_voltage(0);
+            }
+        }
+
+        //Lady Brown Manual Control
+        if (shift == true){
+            if (controller.get_digital(DIGITAL_R2)){
+                ladyBrown.move_voltage(-10000);
+            }else if (controller.get_digital(DIGITAL_R1)){
+                ladyBrown.move_voltage(10000);
+            }else{
+                ladyBrown.move_voltage(0);
+            }
+        }
+
+        //Lady Brown Macro Control
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
             if (counter == 0) {
                 setPosition(18);

@@ -11,6 +11,7 @@ bool settled = false;
 
 //Rotation Sensor
 pros::Rotation rotationSensor(2);
+double rotsens = rotationSensor.get_position();
 
 //Motors
 pros::Motor ladyBrown(17, pros::MotorGearset::green);
@@ -37,7 +38,7 @@ void ladyBrownInit(){
 void asyncController(void * param){
     while (true){
         settled = false;
-        error = ladyBrownTargetPosition - (rotationSensor.get_position()/100); 
+        error = ladyBrownTargetPosition - (rotsens/100); 
         if (error < 3 && error > -3){
             error = 0;
             settled = true;
