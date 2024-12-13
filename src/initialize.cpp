@@ -1,13 +1,12 @@
 #include "main.h" // IWYU pragma: keep
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/trackingWheel.hpp" // IWYU pragma: keep
-#include "graphics/graphics.cpp" // IWYU pragma: keep
 #include "pros/colors.hpp" // IWYU pragma: keep
 #include "pros/misc.h" // IWYU pragma: keep
 #include "ladybrown.h"// IWYU pragma: keep
 #include <array> // IWYU pragma: keep
 #include "globals.hpp" // IWYU pragma: keep
-#include "autonomous.cpp"
+#include "autonomous.hpp"
 
 
 void initialize() {
@@ -21,7 +20,7 @@ void initialize() {
     
     ladyBrownInit();
 
-    pros::Task ladyBrownTask(asyncController);
+    //pros::Task ladyBrownTask(asyncController);
 
     // print position to brain screen
     pros::Task screen_task([&]() {

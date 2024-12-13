@@ -13,3 +13,6 @@ extern void asyncController(void * param);
 extern double getData();
 
 extern void waitUntilSettled();
+
+//Motor
+extern pros::Motor ladyBrown;

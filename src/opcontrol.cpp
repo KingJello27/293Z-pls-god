@@ -7,8 +7,8 @@
 #include "ladybrown.h"// IWYU pragma: keep
 #include <array> // IWYU pragma: keep
 #include "globals.hpp"
-#include "autonomous.cpp"
-#include "ladybrown.cpp" // IWYU pragma: keep
+// #include "autonomous.cpp"
+// #include "ladybrown.cpp" // IWYU pragma: keep
 
 
 void opcontrol() {
@@ -16,7 +16,6 @@ void opcontrol() {
     int counter = 0;
     bool tilterState = false;
     tilter.set_value(tilterState);
-    tilter2.set_value(tilterState);
 
     bool doinkerState = false;
     doinker.set_value(doinkerState);
@@ -41,7 +40,6 @@ void opcontrol() {
         if (controller.get_digital_new_press(DIGITAL_L1)){
         tilterState = !tilterState;
         tilter.set_value(tilterState);
-        tilter2.set_value(tilterState);
         }
 
         //Doinker Control
@@ -58,14 +56,14 @@ void opcontrol() {
         //Intake Control
         if (shift == false){
             if (controller.get_digital(DIGITAL_R2)){
-                intake.move_voltage(-10000);
-                intake2.move_voltage(-10000);
+                hookIntake.move_voltage(-10000);
+                rollerIntake.move_voltage(-10000);
             }else if (controller.get_digital(DIGITAL_R1)){
-                intake.move_voltage(10000);
-                intake2.move_voltage(10000);
+                hookIntake.move_voltage(10000);
+                rollerIntake.move_voltage(10000);
             }else{
-                intake.move_voltage(0);
-                intake2.move_voltage(0);
+                hookIntake.move_voltage(0);
+                rollerIntake.move_voltage(0);
             }
         }
 

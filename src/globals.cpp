@@ -10,31 +10,30 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // left motor group
-pros::MotorGroup leftMotors({-13, -14, -20}, pros::MotorGears::blue);
+pros::MotorGroup leftMotors({-2, -14, -18}, pros::MotorGears::blue);
 // right motor group
-pros::MotorGroup rightMotors({11, 12, 19}, pros::MotorGears::blue);
+pros::MotorGroup rightMotors({12, 15, 9}, pros::MotorGears::blue);
 
 // vertical tracking wheel encoder
-pros::Rotation vertical_encoder(3);
+pros::Rotation vertical_encoder(16);
 // horizontal tracking wheel encoder
-pros::Rotation horizontal_encoder(8);
+pros::Rotation horizontal_encoder(19);
 // horizontal tracking wheel
 lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::OLD_275, -3);
 // horizontal tracking wheel
 lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::OLD_275, -0.5);
 
 //Motors
-pros::Motor intake(10, pros::MotorGearset::blue);
-pros::Motor intake2(9, pros::MotorGearset::blue);
+pros::Motor hookIntake(13, pros::MotorGearset::blue);
+pros::Motor rollerIntake(10, pros::MotorGearset::blue);
 
 //pneumatics
-pros::adi::DigitalOut tilter('B');
-pros::adi::DigitalOut tilter2('C');
-pros::adi::DigitalOut doinker('A');
+pros::adi::DigitalOut tilter('A');
+pros::adi::DigitalOut doinker('B');
 // pros::adi::DigitalOut colorPicker('D');
 
 //IMU
-pros::Imu imu(16);
+pros::Imu imu(1);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -42,19 +41,19 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               11.5, // 12 inch track width
                               lemlib::Omniwheel::NEW_325, // using old 3.25" omnis
                               450, // drivetrain rpm is 360
-                              2 // horizontal drift is 2 (for now)
+                              0 // horizontal drift is 2 (for now)
 );
 
 // lateral PID controller
 lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)
-                                              0, // integral gain (kI)
-                                              3, // derivative gain (kD)
-                                              3, // anti windup
-                                              1, // small error range, in inches
-                                              100, // small error range timeout, in milliseconds
-                                              3, // large error range, in inches
-                                              500, // large error range timeout, in milliseconds
-                                              20 // maximum acceleration (slew)
+                                              1, // integral gain (kI)
+                                              50, // derivative gain (kD)
+                                              0, // anti windup
+                                              0, // small error range, in inches
+                                              0, // small error range timeout, in milliseconds
+                                              0, // large error range, in inches
+                                              0, // large error range timeout, in milliseconds
+                                              0 // maximum acceleration (slew)
 );
 
 // angular PID controller

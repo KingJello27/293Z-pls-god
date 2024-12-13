@@ -14,7 +14,7 @@ pros::Rotation rotationSensor(2);
 double rotsens = rotationSensor.get_position();
 
 //Motors
-pros::Motor ladyBrown(17, pros::MotorGearset::green);
+pros::Motor ladyBrown(20, pros::MotorGearset::green);
 
 
 double getData(){
