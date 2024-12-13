@@ -10,7 +10,7 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // left motor group
-pros::MotorGroup leftMotors({-2, -14, -18}, pros::MotorGears::blue);
+pros::MotorGroup leftMotors({-6, -14, -18}, pros::MotorGears::blue);
 // right motor group
 pros::MotorGroup rightMotors({12, 15, 9}, pros::MotorGears::blue);
 
