@@ -47,28 +47,52 @@ chassis.moveToPoint(20, 15, 4000, {.forwards = false, .maxSpeed = 127, .minSpeed
 void autonomous() {
 
     if (selectionIndex == 0){
+        // //PID Tuning
+        // chassis.setPose(0,0,0);
+        // chassis.moveToPose(0, 24, 0, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 100, .minSpeed = 60, .earlyExitRange = 0}, false);
 
-        chassis.setPose(0,0,0);
-        chassis.moveToPose(0, 24, 0, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 100, .minSpeed = 60, .earlyExitRange = 0}, false);
+        //Red Left AWP
+        chassis.setPose(-58.7, 8, 90);
 
-        // //Red Left AWP
-        // chassis.setPose(-58.7, 7, 0);
+        //score on alliance stake
+        chassis.swingToPoint(-52, 0, DriveSide::LEFT, 1000, {.forwards = true, .direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        chassis.waitUntilDone();
+        chassis.moveToPose(-66, 0, 0, 4000, {.forwards = false, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        intake.move_velocity(12000);
+        pros::delay(750);
 
-        // //score on alliance stake
-        // intake.move_velocity(12000);
-        // chassis.swingToPoint(-64, 0, DriveSide::LEFT, 1000, {.forwards = false, .direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
-        // chassis.waitUntilDone();
-        // intake.move_velocity(-12000);
-        // pros::delay(750);
+        //grab mobile goal
+        chassis.moveToPose(-58.7, 0, 0, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        chassis.waitUntilDone();
+        chassis.moveToPose(-31, 19, -40, 4000, {.forwards = false, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 1});
+        tilt();
 
-        // //grab mobile goal
-        // chassis.moveToPose(-58.7, 0, -90, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
-        // chassis.waitUntilDone();
-        // chassis.moveToPose(-31.5, 18, 50, 4000, {.forwards = false, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 1});
-        // tilt();
+        //score first ring
+        intake.move_velocity(12000);
+        chassis.turnToPoint(-24.5, 32.5, 1000, {.forwards = true, .direction = AngularDirection::AUTO, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        chassis.waitUntilDone();
+        chassis.moveToPoint(-24.5, 32.5, 4000, {.forwards = true, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 2});
+        chassis.moveToPose(-8, 41, 0, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0});
+        chassis.waitUntilDone();
 
-        // //score first ring
-        // chassis.moveToPose(-23.5, 47, 50, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 1});
+        //score second ring
+        chassis.swingToPoint(-24.5, 32.5, DriveSide::RIGHT, 1000, {.forwards = false, .direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        chassis.waitUntilDone();
+
+        //score second ring
+        chassis.moveToPoint(-23.5, 47, 4000, {.forwards = true, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 1});
+        chassis.moveToPose(-7, 50, 0, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0});
+        chassis.waitUntilDone();
+
+        //touch the pole
+        chassis.moveToPoint(-23.5, 47, 4000, {.forwards = false, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 3});
+        chassis.turnToPoint(-24, 4, 1000, {.forwards = true, .direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 0}, false);
+        chassis.waitUntilDone();
+        chassis.moveToPose(-24, 4, 90, 4000, {.forwards = true, .horizontalDrift = 0, .lead = 0.6, .maxSpeed = 127, .minSpeed = 0, .earlyExitRange = 3});
+
+
+
+
 
     }else if (selectionIndex == 1){
         //Red Right AWP

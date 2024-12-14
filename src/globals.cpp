@@ -14,6 +14,9 @@ pros::MotorGroup leftMotors({-6, -14, -18}, pros::MotorGears::blue);
 // right motor group
 pros::MotorGroup rightMotors({12, 15, 9}, pros::MotorGears::blue);
 
+//Intake Motor Group
+pros::MotorGroup intake({-13,-10}, pros::MotorGears::blue);
+
 // vertical tracking wheel encoder
 pros::Rotation vertical_encoder(16);
 // horizontal tracking wheel encoder
@@ -23,9 +26,9 @@ lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omn
 // horizontal tracking wheel
 lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::OLD_275, -0.5);
 
-//Motors
-pros::Motor hookIntake(13, pros::MotorGearset::blue);
-pros::Motor rollerIntake(10, pros::MotorGearset::blue);
+// //Motors
+// pros::Motor hookIntake(13, pros::MotorGearset::blue);
+// pros::Motor rollerIntake(10, pros::MotorGearset::blue);
 
 //pneumatics
 pros::adi::DigitalOut tilter('A');

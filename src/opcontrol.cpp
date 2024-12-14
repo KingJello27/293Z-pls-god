@@ -56,42 +56,52 @@ void opcontrol() {
         //Intake Control
         if (shift == false){
             if (controller.get_digital(DIGITAL_R2)){
-                hookIntake.move_voltage(-10000);
-                rollerIntake.move_voltage(-10000);
+                intake.move_voltage(-12000);
             }else if (controller.get_digital(DIGITAL_R1)){
-                hookIntake.move_voltage(10000);
-                rollerIntake.move_voltage(10000);
+                intake.move_voltage(12000);
             }else{
-                hookIntake.move_voltage(0);
-                rollerIntake.move_voltage(0);
+                intake.move_voltage(0);
             }
         }
 
-        //Lady Brown Manual Control
-        if (shift == true){
-            if (controller.get_digital(DIGITAL_R2)){
-                ladyBrown.move_voltage(-10000);
-            }else if (controller.get_digital(DIGITAL_R1)){
-                ladyBrown.move_voltage(10000);
-            }else{
-                ladyBrown.move_voltage(0);
-            }
-        }
+        // //Lady Brown Manual Control
+        // if (shift == true){
+        //     if (controller.get_digital(DIGITAL_R2)){
+        //         ladyBrown.move_voltage(-12000);
+        //     }else if (controller.get_digital(DIGITAL_R1)){
+        //         ladyBrown.move_voltage(12000);
+        //     }else{
+        //         ladyBrown.move_voltage(0);
+        //     }
+        // }
 
         //Lady Brown Macro Control
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
             if (counter == 0) {
-                setPosition(18);
+                setPosition(1750);
             }
+            // else if (counter == 1) {
+            //     setPosition(13000);
+            // }
             else if (counter == 1) {
-                setPosition(120);
-            }
-            else if (counter == 2) {
                 setPosition(0);
             }
             counter ++;
-            counter = counter % 3;
+            counter = counter % 2;
         }
+
+        if (rotationSensor.get_position() < -0.04){
+            if (controller.get_digital(DIGITAL_R2)){
+                ladyBrown.move_voltage(12000);
+                intake.move_velocity(0);
+            }else {
+                if (controller.get_digital(DIGITAL_R2)){
+                    intake.move_velocity(-12000);
+            }
+
+        }
+
+
 
 //         //Color Sorter
 //         rgb_value = opticalSensor.get_rgb();
@@ -111,5 +121,6 @@ void opcontrol() {
 
         // delay to save resources
         pros::delay(25);
+    }
     }
 }

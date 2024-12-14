@@ -20,7 +20,7 @@ void initialize() {
     
     ladyBrownInit();
 
-    //pros::Task ladyBrownTask(asyncController);
+    pros::Task ladyBrownTask(asyncController);
 
     // print position to brain screen
     pros::Task screen_task([&]() {

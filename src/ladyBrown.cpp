@@ -10,11 +10,10 @@ double input;
 bool settled = false;
 
 //Rotation Sensor
-pros::Rotation rotationSensor(2);
-double rotsens = rotationSensor.get_position();
+pros::Rotation rotationSensor(-7);
 
 //Motors
-pros::Motor ladyBrown(20, pros::MotorGearset::green);
+pros::Motor ladyBrown(-20, pros::MotorGearset::green);
 
 
 double getData(){
@@ -30,7 +29,7 @@ void setPosition(double targetPosition){
 void ladyBrownInit(){
     rotationSensor.reset_position();
     ladyBrownTargetPosition = 0;
-    kP = 1;
+    kP = 0.01;
     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
@@ -38,7 +37,7 @@ void ladyBrownInit(){
 void asyncController(void * param){
     while (true){
         settled = false;
-        error = ladyBrownTargetPosition - (rotsens/100); 
+        error = ladyBrownTargetPosition - rotationSensor.get_position(); 
         if (error < 3 && error > -3){
             error = 0;
             settled = true;
