@@ -76,33 +76,33 @@ void opcontrol() {
         // }
 
         //Lady Brown Macro Control
+
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+            manual = false;
+        }
+        
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
             if (counter == 0) {
-                setPosition(1750);
+                setPosition(1950);
             }
-            // else if (counter == 1) {
-            //     setPosition(13000);
-            // }
             else if (counter == 1) {
+                setPosition(13000);
+                waitUntilSettled();
+                manual = true;
+            }
+            else if (counter == 2) {
                 setPosition(0);
             }
             counter ++;
-            counter = counter % 2;
+            counter = counter % 3;
         }
 
-        if (rotationSensor.get_position() < -0.04){
-            if (controller.get_digital(DIGITAL_R2)){
+        if (manual == true){
+            if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
                 ladyBrown.move_voltage(12000);
-                intake.move_velocity(0);
-            }else {
-                if (controller.get_digital(DIGITAL_R2)){
-                    intake.move_velocity(-12000);
+                intake.move_voltage(0);
             }
-
         }
-
-
-
 //         //Color Sorter
 //         rgb_value = opticalSensor.get_rgb();
 //             //Blue
@@ -121,6 +121,5 @@ void opcontrol() {
 
         // delay to save resources
         pros::delay(25);
-    }
     }
 }

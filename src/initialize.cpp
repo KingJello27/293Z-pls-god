@@ -7,6 +7,7 @@
 #include <array> // IWYU pragma: keep
 #include "globals.hpp" // IWYU pragma: keep
 #include "autonomous.hpp"
+#include "colorSort.hpp"
 
 
 void initialize() {
@@ -20,20 +21,25 @@ void initialize() {
     
     ladyBrownInit();
 
+    manual = false;
+
+    colorSortInit();
+
     pros::Task ladyBrownTask(asyncController);
+    pros::Task colorSortTask(colorSortAsyncController);
 
     // print position to brain screen
-    pros::Task screen_task([&]() {
-        while (true) {
-            // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Auton Selection: %s", autonNames[selectionIndex]);
-            // delay to save resources
-            pros::delay(20);
-        }
-    });
+    // pros::Task screen_task([&]() {
+    //     while (true) {
+    //         // print robot location to the brain screen
+    //         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+    //         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+    //         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+    //         pros::lcd::print(3, "Auton Selection: %s", autonNames[selectionIndex]);
+    //         // delay to save resources
+    //         pros::delay(20);
+    //     }
+    // });
 
 }
 

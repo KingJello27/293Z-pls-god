@@ -17,5 +17,8 @@ extern void waitUntilSettled();
 //Motor
 extern pros::Motor ladyBrown;
 
+//ladybrown manual
+extern bool manual;
+
 //Rotation Sensor
 extern pros::Rotation rotationSensor;

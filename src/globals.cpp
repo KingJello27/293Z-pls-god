@@ -10,7 +10,7 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // left motor group
-pros::MotorGroup leftMotors({-6, -14, -18}, pros::MotorGears::blue);
+pros::MotorGroup leftMotors({-7, -14, -18}, pros::MotorGears::blue);
 // right motor group
 pros::MotorGroup rightMotors({12, 15, 9}, pros::MotorGears::blue);
 
@@ -18,13 +18,13 @@ pros::MotorGroup rightMotors({12, 15, 9}, pros::MotorGears::blue);
 pros::MotorGroup intake({-13,-10}, pros::MotorGears::blue);
 
 // vertical tracking wheel encoder
-pros::Rotation vertical_encoder(16);
+pros::Rotation vertical_encoder(-16);
 // horizontal tracking wheel encoder
 pros::Rotation horizontal_encoder(19);
 // horizontal tracking wheel
-lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::OLD_275, -3);
+lemlib::TrackingWheel horizontal_tracking_wheel(&horizontal_encoder, lemlib::Omniwheel::NEW_275, -3);
 // horizontal tracking wheel
-lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::OLD_275, -0.5);
+lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_275, -0.5);
 
 // //Motors
 // pros::Motor hookIntake(13, pros::MotorGearset::blue);
@@ -36,7 +36,7 @@ pros::adi::DigitalOut doinker('B');
 // pros::adi::DigitalOut colorPicker('D');
 
 //IMU
-pros::Imu imu(1);
+pros::Imu imu(17);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -50,7 +50,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 // lateral PID controller
 lemlib::ControllerSettings lateral_controller(10, // proportional gain (kP)
                                               1, // integral gain (kI)
-                                              50, // derivative gain (kD)
+                                              3, // derivative gain (kD)
                                               0, // anti windup
                                               0, // small error range, in inches
                                               0, // small error range timeout, in milliseconds
